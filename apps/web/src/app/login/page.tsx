@@ -26,12 +26,16 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      router.push('/dashboard'); // Redirect to dashboard after login
+      router.push('/search'); // Redirect to /search instead of /dashboard
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to login');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleWalletSuccess = () => {
+    router.push('/search'); // Redirect to /search after wallet auth
   };
 
   return (
@@ -40,7 +44,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold mb-6 text-center">Login to StellarRent</h1>
 
         <div className="mb-6">
-          <WalletAuthButton />
+          <WalletAuthButton onSuccess={handleWalletSuccess} />
         </div>
 
         <div className="relative mb-6">
@@ -48,7 +52,7 @@ export default function LoginPage() {
             <div className="w-full border-t border-gray-300" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or continue with email</span>
+            <span className="px-2 bg-background text-gray-500">Or continue with email</span>
           </div>
         </div>
 
