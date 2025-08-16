@@ -1,39 +1,77 @@
+'use client';
+
+import { FeaturedProperties } from '@/components/features/properties/FeaturedProperties';
 import { SearchBar } from '@/components/features/search/SearchBar';
-import { RightSidebar } from '@/components/layout/RightSidebar';
-import { PropertyGrid } from '@/components/search/PropertyGrid';
-import { House } from 'lucide-react';
-import Image from 'next/image';
-import { Suspense } from 'react';
+import { HowItWorks } from '@/components/shared/HowItWorks';
+import { Testimonials } from '@/components/shared/Testimonials';
+import { Footer } from '@/components/shared/layout/Footer';
+import { HeroSection } from '@/components/shared/layout/HeroSection';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/auth/use-auth';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  // Optional: Redirect authenticated users to /search
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/search');
+    }
+  }, [isAuthenticated, router]);
+
   return (
-    <div className="flex w-full min-h-screen">
-      <main className="flex flex-1 flex-col w-full min-h-screen px-5 pr-16">
-        <header className="flex items-center justify-between p-4 border-b border-gray-800">
-          <Image src="/logo.png" alt="StellaRent" width={100} height={100} />
-        </header>
-
-        <section className="p-4">
-          <SearchBar />
-        </section>
-
-        <section className="flex-1 px-4 pb-4">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="text-white text-sm bg-secondary p-2 px-4 rounded-full flex items-center gap-2">
-              <House className="w-4 h-4" />
-              Showing 23 properties
-            </span>
+    <div className="min-h-screen bg-background">
+      {/* Header with CTAs */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-2">
+              <Link href="/" className="text-xl font-bold">
+                StellarRent
+              </Link>
+            </div>
+            <nav className="flex items-center space-x-4">
+              <Link href="/login">
+                <Button variant="ghost">Login</Button>
+              </Link>
+              <Link href="/register">
+                <Button>Register</Button>
+              </Link>
+            </nav>
           </div>
+        </div>
+      </header>
 
-          <Suspense
-            fallback={<div className="py-16 text-center text-white">Loading properties...</div>}
-          >
-            <PropertyGrid />
-          </Suspense>
+      {/* Main Content */}
+      <main className="pt-16">
+        {/* Hero Section */}
+        <HeroSection />
+
+        {/* Search Bar Section */}
+        <section className="py-8 bg-gradient-to-b from-white to-blue-50 dark:from-[#0B1D39] dark:to-[#071429]">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <SearchBar />
+            </div>
+          </div>
         </section>
+
+        {/* Featured Properties */}
+        <FeaturedProperties />
+
+        {/* How It Works */}
+        <HowItWorks />
+
+        {/* Testimonials */}
+        <Testimonials />
       </main>
 
-      <RightSidebar />
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
