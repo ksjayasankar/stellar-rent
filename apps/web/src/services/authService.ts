@@ -1,6 +1,7 @@
 import type { RegisterFormData } from '../validations/auth.schema';
 
-interface AuthResponse {
+// FIXED: Add the 'export' keyword here
+export interface AuthResponse {
   token: string;
   user: {
     id: string;
@@ -9,7 +10,7 @@ interface AuthResponse {
   };
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
 
 export const login = async (email: string, password: string): Promise<AuthResponse> => {
   const response = await fetch(`${API_URL}/auth/login`, {
@@ -33,6 +34,7 @@ export const login = async (email: string, password: string): Promise<AuthRespon
   return data;
 };
 
+// This was already exported, which is good.
 export interface RegisterResponse {
   token: string;
   user: {
