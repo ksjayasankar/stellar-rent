@@ -1,6 +1,6 @@
 'use client';
 
-import PropertyGrid from '@/components/search/PropertyGrid';
+import { PropertyGrid } from '@/components/search/PropertyGrid'; // Changed to named import
 import type { LatLngTuple } from 'leaflet';
 import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
@@ -89,6 +89,9 @@ export default function SearchPage() {
     return [sorted[0]?.price || 0, sorted.at(-1)?.price || 0] as [number, number];
   }, []);
 
+  // Check if there are more properties to load
+  const hasMore = visibleProperties.length < filteredSortedProperties.length;
+
   return (
     <main className="px-4 py-6 mt-10 space-y-6">
       <div className="flex flex-col lg:flex-row gap-3 md:gap-6">
@@ -110,7 +113,12 @@ export default function SearchPage() {
 
           <div className="flex flex-col lg:flex-row">
             <div className="w-full">
-              <PropertyGrid properties={visibleProperties} onLoadMore={loadNextPage} />
+              <PropertyGrid
+                properties={visibleProperties}
+                onLoadMore={loadNextPage}
+                hasMore={hasMore}
+                isLoading={isLoading}
+              />
               {isLoading && <p className="text-center my-4">Loading more properties...</p>}
             </div>
 
